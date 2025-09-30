@@ -13,6 +13,7 @@ import {
 	saveApplicationDetails,
 	setSpotifySession,
 } from "@/services/sessions";
+import { Eye, EyeOff } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -25,6 +26,9 @@ export default function Config() {
 		clientId: string;
 		clientSecret: string;
 	} | null>(null);
+
+	const [showSpotifySecret, setShowSpotifySecret] = useState(false);
+	const [showTidalSecret, setShowTidalSecret] = useState(false);
 
 	const [url, setUrl] = useState("http://127.0.0.1:3000");
 
@@ -56,8 +60,8 @@ export default function Config() {
 				<CardHeader>
 					<CardTitle>Spotify Configuration</CardTitle>
 				</CardHeader>
-				<CardContent>
-					<CardDescription>
+				<CardContent className="space-y-2">
+					<CardDescription className="space-y-2">
 						Create an{" "}
 						<a
 							href="https://developer.spotify.com/dashboard"
@@ -71,8 +75,8 @@ export default function Config() {
 							{url}/api/auth/spotify/callback
 						</pre>
 					</CardDescription>
-					<CardDescription>
-						<div>
+					<CardDescription className="space-y-2">
+						<div className="space-y-2">
 							<Label>Client ID</Label>
 							<Input
 								placeholder="Client ID"
@@ -86,20 +90,40 @@ export default function Config() {
 								value={spotifyConfig?.clientId ?? ""}
 							/>
 						</div>
-						<div>
+						<div className="space-y-2">
 							<Label>Client Secret</Label>
-							<Input
-								placeholder="Client Secret"
-								onChange={(e) => {
-									setSpotifyConfig({
-										clientId: spotifyConfig?.clientId ?? "",
-										clientSecret: e.target.value ?? "",
-									});
-								}}
-								value={spotifyConfig?.clientSecret ?? ""}
-							/>
+							<div className="relative">
+								<Input
+									placeholder="Client Secret"
+									onChange={(e) => {
+										setSpotifyConfig({
+											clientId:
+												spotifyConfig?.clientId ?? "",
+											clientSecret: e.target.value ?? "",
+										});
+									}}
+									type={
+										showSpotifySecret ? "text" : "password"
+									}
+									value={spotifyConfig?.clientSecret ?? ""}
+								/>
+								<Button
+									variant="ghost"
+									size="icon"
+									type="button"
+									className="absolute right-0 top-0 h-full px-3"
+									onClick={() =>
+										setShowSpotifySecret(!showSpotifySecret)
+									}
+								>
+									{showSpotifySecret ? (
+										<EyeOff className="h-4 w-4" />
+									) : (
+										<Eye className="h-4 w-4" />
+									)}
+								</Button>
+							</div>
 						</div>
-						{JSON.stringify(spotifyConfig)}
 					</CardDescription>
 				</CardContent>
 			</Card>
@@ -107,8 +131,8 @@ export default function Config() {
 				<CardHeader>
 					<CardTitle>Tidal Configuration</CardTitle>
 				</CardHeader>
-				<CardContent>
-					<CardDescription>
+				<CardContent className="space-y-2">
+					<CardDescription className="space-y-2">
 						Create an{" "}
 						<a
 							href="https://developer.tidal.com/dashboard"
@@ -123,8 +147,8 @@ export default function Config() {
 						</pre>{" "}
 						and all available scopes.
 					</CardDescription>
-					<CardDescription>
-						<div>
+					<CardDescription className="space-y-2">
+						<div className="space-y-2">
 							<Label>Client ID</Label>
 							<Input
 								placeholder="Client ID"
@@ -138,20 +162,38 @@ export default function Config() {
 								value={tidalConfig?.clientId ?? ""}
 							/>
 						</div>
-						<div>
+						<div className="space-y-2">
 							<Label>Client Secret</Label>
-							<Input
-								placeholder="Client Secret"
-								onChange={(e) => {
-									setTidalConfig({
-										clientId: tidalConfig?.clientId ?? "",
-										clientSecret: e.target.value ?? "",
-									});
-								}}
-								value={tidalConfig?.clientSecret ?? ""}
-							/>
+							<div className="relative">
+								<Input
+									placeholder="Client Secret"
+									onChange={(e) => {
+										setTidalConfig({
+											clientId:
+												tidalConfig?.clientId ?? "",
+											clientSecret: e.target.value ?? "",
+										});
+									}}
+									type={showTidalSecret ? "text" : "password"}
+									value={tidalConfig?.clientSecret ?? ""}
+								/>
+								<Button
+									variant="ghost"
+									size="icon"
+									type="button"
+									className="absolute right-0 top-0 h-full px-3"
+									onClick={() =>
+										setShowTidalSecret(!showTidalSecret)
+									}
+								>
+									{showTidalSecret ? (
+										<EyeOff className="h-4 w-4" />
+									) : (
+										<Eye className="h-4 w-4" />
+									)}
+								</Button>
+							</div>
 						</div>
-						{JSON.stringify(tidalConfig)}
 					</CardDescription>
 				</CardContent>
 			</Card>

@@ -3,6 +3,7 @@ import "./index.css";
 
 import { cx } from "class-variance-authority";
 import { useEffect, useState } from "react";
+import { ThemeToggle } from "./components/theme-toggle";
 import { Toaster } from "./components/ui/sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 import Config from "./pages/configuration";
@@ -23,8 +24,11 @@ export function App() {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<div className="min-w-4xl p-6 h-[90vh] bg-black/20 rounded-md">
-				<h1 className="text-xl font-bold mb-4">Playlist Transfer</h1>
+			<div className="min-w-4xl p-6 h-[90vh] bg-background rounded-md">
+				<div className="flex justify-between items-center mb-4">
+					<h1 className="text-xl font-bold">Playlist Transfer</h1>
+					<ThemeToggle />
+				</div>
 				<Toaster richColors />
 				<Tabs
 					defaultValue="connections"
