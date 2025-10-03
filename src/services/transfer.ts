@@ -1,3 +1,5 @@
+import { findBestTrackIdFromIncluded } from "@/lib/levenshtein";
+
 async function getSpotifyPlaylistTracks(token: string, playlistId: string) {
 	let tracks: { name: string; artist: string }[] = [];
 	let url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=100`;
@@ -81,18 +83,24 @@ async function searchTidalTrack(
 				return track.id;
 			}
 		}
-		const track = data.included[0];
-		const trackName = track.attributes.title;
-		document.dispatchEvent(
-			new CustomEvent("log-event", {
-				bubbles: true,
-				detail: {
-					type: "positive",
-					description: `Could not find an exact match for ${name} (${artist}), using the first returned track - [${track.id} / ${trackName}]`,
-				},
-			})
+
+		const bestTrack = findBestTrackIdFromIncluded(
+			data.included,
+			name,
+			artist
 		);
-		return data.included[0].id ?? null;
+		if (bestTrack) {
+			document.dispatchEvent(
+				new CustomEvent("log-event", {
+					bubbles: true,
+					detail: {
+						type: "negative",
+						description: `Could not find an exact match for ${name} (${artist}), using the closest Levenshtein match - [${bestTrack.bestId} / ${bestTrack.bestName}]`,
+					},
+				})
+			);
+			return bestTrack.bestId ?? null;
+		}
 	}
 	return null;
 }
